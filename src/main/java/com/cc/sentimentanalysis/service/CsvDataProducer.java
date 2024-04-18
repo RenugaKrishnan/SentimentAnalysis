@@ -1,27 +1,24 @@
 package com.cc.sentimentanalysis.service;
 
 import com.cc.sentimentanalysis.models.LayoffMessage;
-import com.opencsv.CSVReader;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
-import com.opencsv.exceptions.CsvException;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.io.*;
-import java.nio.file.Files;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.Reader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -64,10 +61,10 @@ public class CsvDataProducer {
 
         List<LayoffMessage> results = csvReader.parse();
 
-            // Send all parsed messages in bulk
-            for (LayoffMessage message : results) {
-                logger.info("Published Data: {}", message);
-                kafkaProducer.send(new ProducerRecord<>("layoffs-data", message));
-            }
+        // Send all parsed messages in bulk
+        for (LayoffMessage message : results) {
+            logger.info("Published Data: {}", message);
+            kafkaProducer.send(new ProducerRecord<>("layoffs-data", message));
+        }
     }
 }
