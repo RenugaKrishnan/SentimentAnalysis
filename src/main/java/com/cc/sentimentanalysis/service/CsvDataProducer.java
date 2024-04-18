@@ -13,12 +13,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.Reader;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.*;
 import java.util.List;
 import java.util.Map;
 
@@ -35,8 +30,7 @@ public class CsvDataProducer {
 
     @PostConstruct
     public void publishCsvData() throws FileNotFoundException {
-        Path csvPath = Paths.get(csvFilePath);
-        System.out.println(csvPath);
+        String csvFilePath =  this.getClass().getResource("/linkedin_layoffs_data.csv").getPath();
 
         Reader reader = new BufferedReader(new FileReader(csvFilePath));
 
